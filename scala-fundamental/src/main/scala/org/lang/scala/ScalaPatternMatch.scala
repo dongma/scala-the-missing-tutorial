@@ -42,6 +42,37 @@ object scalaPatternMatch {
       )) {
         println(seqToString(seq))
       }
+
+      // 对seqToString2进行重新的格式化，在每个元素中增加外部的括号，使用了两个case语句和递归就处理了序列
+      for (seq <- Seq(nonEmptySeq, emptySeq, nonEmptyMap.toSeq)) {
+        println(seqToString2(seq))
+      }
+
+      // 通过listToString方法将List元素列表转换成String字符串
+      for (l <- List(nonEmptyList, emptyList)) {
+        println(listToString(l))
+      }
+
+      // 可以通过序列化后的String反响构建List[Int]、listMap对象(List[(String, Int)])、map对象(Map[String, Int])
+      val seqList = (1 +: (2 +: (3 +: (4 +: ( 5 +: Nil)))))
+      val listMap = (("one", 1) +: (("two", 2) +: (("three", 3) +: Nil)))
+      val mapObject = Map(listMap : _*)
+      println(s"convert mapObject value: $mapObject")
+
+      // 通过元素子棉量对scala中元组进行匹配，在java中并不存在元组 最多存在两纬的map
+      val langs = Seq(
+        ("Scala", "Martin", "Odersky"),
+        ("Clojure", "Rich", "Mickey"),
+        ("Lisp", "John", "McCarthy")
+      )
+
+      for (tuple <- langs) {
+        tuple match {
+          case ("Scala", _, _) => println("Found Scala")
+          case (lang, first, last) => println(s"Found other language: $lang ($first, $last)")
+        }
+      }
+
     }
   }
 
@@ -72,6 +103,18 @@ object scalaPatternMatch {
     // 用于匹配非空的Seq，提取其头部（第一个元素）以及尾部（除头部以外，剩下的元素）
     case head +: tail => s"$head +: " + seqToString(tail)
     case Nil => "Nil"
+  }
+
+  def seqToString2[T](seq: Seq[T]): String = seq match {
+    // 重新进行了格式化，增加了外部的括号"()"
+    case head +: tail => s"($head +: ${seqToString2(tail)})"
+    case Nil => "(Nil)"
+  }
+
+  def listToString[T](list: List[T]): String = list match {
+    // 使用::替代了+:符号，将List的head和tail内容拼接起来
+    case head :: tail => s"($head :: ${listToString(tail)})"
+    case Nil => "(Nil)"
   }
 
 }
