@@ -1,5 +1,7 @@
 package org.lang.scala
 
+import org.lang.scala.scalaPatternMatch.Op.Op
+
 /**
  * @author Sam Ma
  * @date 2020/06/06
@@ -87,9 +89,11 @@ object scalaPatternMatch {
       val charlie = Person("Charlie", 32, Address("3 Python Ct", "Boston", "USA"))
       for (person <- Seq(alice, bob, charlie)) {
         person match {
-          case Person("Alice", 25, Address(_, "Chicago", _)) => println("Hi Alice!")
-          case Person("Bob", 29, Address("2 Java Ave", "Miami", "USA")) => println("hi bob!")
-          case Person(name, age, _) => println(s"Who are you, $age year-old person and $name?")
+          // p@...语法会将整个Person类的实例赋值给p, 当不需要从p的实例中取值只需写 p : Person => 就可以
+          case p @ Person("Alice", 25, Address(_, "Chicago", _)) => println("Hi Alice! $p")
+          case p @ Person("Bob", 29, a @ Address("2 Java Ave", "Miami", "USA")) =>
+            println(s"hi ${p.name}! age {${p.age}}, in ${a.city}")
+          case p @ Person(name, age, _) => println(s"Who are you, $age year-old person and $name? $p")
         }
       }
       // 对于(String, Double)组成的元组序列，表示商店里商品和价格 想通过for同时将其序列号打印出来，可使用zipWithIndex方法
@@ -115,6 +119,44 @@ object scalaPatternMatch {
         println(windows2(seq))
       }
 
+      import Op._
+      val wheres = Seq(
+        WhereIn("state", "IL", "CA", "VA"),
+        WhereOp("state", EQ, "IL"),
+        WhereOp("name", EQ, "Buck Trends"),
+        WhereOp("age", GT, 29)
+      )
+      for (where <- wheres) {
+        // where中匹配可变参数的语法形式为 name@_*, 声明时可变参数为vals: T*类型
+        where match {
+          case WhereIn(col, val1, vals@_*) =>
+            val valStr = (val1 +: vals).mkString(",")
+            println(s"WHERE $col in {$valStr}")
+          case WhereOp(col, op, value) => println(s"Where $col $op $value")
+          case _ => println(s"ERROR: Unknown expression: $where")
+        }
+      }
+
+      // 对于不同的集合在scala中进行类型匹配，List(5.5, 5.6, 5.7), List("a", "b")匹配集合中首元素类型
+      for {
+        x <- Seq(List(5.5, 5.6, 5.7), List("a", "b"), Nil)
+      } yield {
+        x match {
+          case seq: Seq[_] => println(s"seq ${doSeqMatch(seq)}", seq)
+          case _ => println("unknown!", x)
+        }
+      }
+
+      // 模式匹配的其它用法，使用这种方式直接将Person中对象的属性提取出来
+      val Person(name, age, Address(_, state, _)) = Person("Dean", 29, Address("1 scala way", "CA", "USA"));
+      println(s"name: $name, age: $age, Address.state: $state")
+
+      // 将List中的元素分成head和tail两部分，head1为序列的首元素、tail为剩余的元素序列
+      val head1 +: tail = List(1, 2, 3)
+      println(s"seq list head1 value: $head1, tail value: $tail")
+
+      val (sum, count) = sum_count(List(1, 2, 3, 4, 5))
+      println(s"sum value: $sum count value of List is: $count")
     }
   }
 
@@ -181,5 +223,33 @@ object scalaPatternMatch {
     case head +: tail => s"($head, _), " + windows2(tail)
     case Nil => "Nil"
   }
+
+  object Op extends Enumeration {
+    type Op = Value
+
+    val EQ = Value("=")
+    val NE = Value("!=")
+    val LTGT = Value("<>")
+    val LT = Value("<")
+    val LE = Value("<=")
+    val GT = Value(">")
+    val GE = Value(">=")
+  }
+
+  case class WhereOp[T](columnName: String, op: Op, value: T)
+
+  case class WhereIn[T](columnName: String, val1: T, vals: T*)
+
+  // 对集合序列进行匹配，由于jvm的类型擦除并不能区分匹配List("a", "b") Seq(List(5, 5, 6, 7))
+  def doSeqMatch[T](seq: Seq[T]): String = seq match {
+    case Nil => "Nothing"
+    case head +: _ => head match {
+      case _: Double => "Double"
+      case _: String => "String"
+      case _ => "Unmatched seq element"
+    }
+  }
+
+  def sum_count(ints: Seq[Int]) = (ints.sum, ints.size)
 
 }
