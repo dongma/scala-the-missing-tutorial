@@ -10,6 +10,7 @@
     <module>scala-collection</module>
     <module>scala-type-system</module>
     <module>scala-fundamental</module>
+      <module>scala-implicit</module>
   </modules>
   <properties>
     <scala.version>2.13.2</scala.version>
