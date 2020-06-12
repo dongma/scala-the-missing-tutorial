@@ -3,7 +3,7 @@ package org.lang.scala
 /**
  * @author Sam Ma
  * @date 2020/06/11
- *
+ * 使用scala编写数据库的api, 该api与java api较为类似
  */
 package database_api {
 

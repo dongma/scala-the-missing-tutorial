@@ -26,6 +26,14 @@ object ImplicitArgs {
     val list = MyList(List(1, 3, 5, 2, 4))
     list.sortBy1(i => -i)
     println("sortBy1 value: " + list)
+
+    val listMap = List("one" -> 1, "two" -> 2, "three" -> 3)
+    println(s"list to Map: ${listMap.toMap}")
+
+    // 为避免jvm的类型擦除内容，使用TypeErasure隐式根据不同的list进行打印
+    import TypeErasure._
+    method(List(1, 2, 3))
+    method(List("one", "two", "three"))
   }
 
   def calcTax(amount: Float)(implicit rate: Float): Float = amount * rate
@@ -54,4 +62,12 @@ case class MyList[A](list: List[A]) {
 
   // 参数B:Ordering被称为上下文定界，它暗指第二个参数列表(也就是哪个隐式参数列表)将接受Ordering[B]实例
   def sortBy2[B: Ordering](f: A => B): List[A] = list.sortBy(f)(implicitly[Ordering[B]])
+}
+
+object TypeErasure {
+  implicit object IntMarker
+  implicit object StringMarker
+
+  def method(seq: Seq[Int])(implicit i: IntMarker.type): Unit = println(s"Seq[Int]: $seq")
+  def method(seq: Seq[String])(implicit s: StringMarker.type): Unit = println(s"Seq[String]: $seq")
 }
