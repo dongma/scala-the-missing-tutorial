@@ -3,7 +3,7 @@ package org.lang.scala
 /**
  * @author Sam Ma
  * @date 2020/06/12
- *
+ * scala中的虚类型，implicit必须出现在参数列表的最左边，而且只能出现一次
  */
 object CalculatePayroll {
 
@@ -34,6 +34,12 @@ object CalculatePayroll {
     val twoWeekNetPipeline = payPipeline.netPay
     val twoWeekGrossPipeline = employee.annualSalary / 26.0F
     println(f" $$${twoWeekGrossPipeline}%.2f vs. $$${twoWeekNetPipeline}%.2f or ${percentPipeline}%.1f%%")
+
+    // 使用zip方法将keys和values集合拼接起来，生成Map类型
+    val keys = List("a", "b", "c", "d")
+    val values = List("A", 123, 3.14159)
+    val keysValues = keys zip values
+    println(s"zip operate with keys and values, result: $keysValues")
   }
 
 }
