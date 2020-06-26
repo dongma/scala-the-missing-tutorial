@@ -65,10 +65,20 @@ object ScalaFunction {
     val filterCapitals = stateCapitals filter { keyValue => keyValue._1 startsWith "A" }
     println(s"filterCapitals value is: $filterCapitals")
 
+    /*
+     * scala中fold()和reduce()函数并不保证固定的遍历顺序，而foldLeft()和reduceLeft()则从左到右遍历集合元素
+     */
     val listValue = List(1, 2, 3, 4, 5, 6)
+    // 当不确定传入的集合是否为空时 可使用optionReduce代替reduce 对集合中的元素进行规约
     val reduceResult = listValue reduce (_ + _)
-    val foldValue = listValue.fold (10) (_ * _)
+    val foldValue = listValue.fold(10)(_ * _)
     println(s"listValue are $listValue, reduce result $reduceResult, foldValue is $foldValue")
+    /*
+     * 使用与cons操作符等价的#:: 我们为Stream构造了序列的前两个元素，分别是n等于0和n等于1的特例 接着用递归定义剩下的元素
+     */
+//    val fibs: Stream[BigInt] = BigInt(0) #:: BigInt(1) #:: fibs.zip(fibs.tail).map(n => n._1 + n._2)
+//    fibs take 10 foreach (item => print(s"$item "))
+
   }
 
   /**
