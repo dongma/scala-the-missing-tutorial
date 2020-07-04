@@ -14,6 +14,13 @@ object TraitClass {
     button addObserver buttonObserver
     (1 to 5) foreach (_ => button.click())
     assert(buttonObserver.count == 5)
+
+    // 在创建Button对象时 默认实现了ObservableClicks trait接口，并可在button2上注册事件
+    val button2 = new Button("click me") with ObservableClicks
+    val clickObserver = new ClickCountObserver()
+    button2 addObserver clickObserver
+    (1 to 5) foreach (_ => button2.click())
+    assert(clickObserver.count == 5, s"clickObserver.count ${clickObserver.count} != 5")
   }
 
 }
@@ -57,10 +64,38 @@ abstract class AbstractClass {
  */
 abstract class Widget
 
-class Button(val label:String) extends Widget {
-  def click(): Unit = updateUi()
+/*
+ * 因为所有小组件都有click点击事件，故需要引入一个trait的Clickable
+ */
+trait Clickable {
+  def click(): Unit = updateUi();
 
-  def updateUi(): Unit = { /* 包含GUI样式的修改逻辑 */ }
+  protected def updateUi(): Unit = { /* 包含GUI样式的修改逻辑 */ }
+}
+
+/*
+ * Button在原有基础上实现 Clickable，自定义updateUi()的逻辑
+ */
+class Button(val label:String) extends Widget with Clickable {
+
+  override protected def updateUi(): Unit = { /* Button的GUI样式的修改逻辑 */ }
+}
+
+/*
+ * Observation特征应该依附于Clickable特征，而不再是之前的Button类。由于确实需要观察像点击这样的事件，
+ * 为此引入了仅用于观察Clickable事件的trait
+ */
+trait ObservableClicks extends Clickable with Subject[Clickable] {
+
+  abstract override def click(): Unit = {
+    super.click()
+    notifyObservers(this)
+  }
+}
+
+class ClickCountObserver extends Observer[Clickable] {
+  var count = 0
+  override def receiveUpdate(state: Clickable): Unit = count += 1
 }
 
 /*
