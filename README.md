@@ -38,5 +38,52 @@ val pf = pf1 orElse pf2
 List("str", 3.14, 10) foreach {item => print(pf(item).toString + "")}
 ```
 
+scala中的for推导式，`breed <- dogBreeds`为生成器表达式，其会将右边集合中逐个元素提取出来赋予`breed`变量，处理后结果可通过`yield`进行收集（类似于`java`8中 `stream().map().collect(Collectors.toList())`）。`item @ breed <- dogBreeds`会将每个元素赋予变量`item`，该变量可跨作用域在`yield`部分使用。
 
+```scala
+val dogBreeds = List("doberman", "yorkshire terrier", "dachshud", "scottish terrier", "greate dane",
+                     "portuguese water dog")
+val filteredBreeds = for {
+  item @ breed <- dogBreeds
+  if breed.contains("terrier") && breed.startsWith("yorkshire")
+} yield breed
+```
+
+定义枚举类需继承`Enumeration`类，`type BreedEnum = Value`定义类型 之后用变量列表表示枚举变量值。 提取枚举值使用`BreedEnum.values`属性返回类型为集合 并通过`filter`对其值进行过滤，变量的惰性赋值可使用`lazy`关键字。
+
+```scala
+object BreedEnum extends Enumeration {
+  type BreedEnum = Value
+  val doberman = Value("Doberman Pinscher")
+  val yorkie = Value("Yorkshine Terrier")
+  val scottie = Value("Scottish Terrier")
+  val dane = Value("Great Dane")
+  val portie = Value("Portuguese Water Dog")
+}
+// 通过自定义filter对BreedEnum.values中的数据进行过滤
+BreedEnum.values filter (_.toString.endsWith("Terrier")) foreach println
+
+lazy val resource: Int= init()
+```
+
+scala中异常捕获的语法，使用`try..catch..finally`的语法处理异常行为，其与java中的异常处理语法类似。catch语句中`NonFatal(ex)`用于捕获所有非致命性异常，`finally`语句块多用于数据库、文件资源的释放。
+
+```scala
+// 由于将source类声明为Option类型，因此我们在finally子句中能分辨出source对象是否是实例化
+var source: Option[Source] = None
+try {
+  source = Some(Source.fromFile(filename))
+  val size = source.get.getLines().size
+  println(s"file $filename has $size lines")
+} catch {
+  // scala捕获异常的方式更为紧凑，case NonFatal(ex)捕获所有非致命性异常
+  case NonFatal(ex) => println(s"Non fatal exception! $ex")
+} finally {
+  // <-操作实际用于从Option中获取value值，若source类型为None则不会发生任何事情
+  for (s <- source) {
+    println(s"Closing $filename..")
+    s.close()
+  }
+}
+```
 
