@@ -86,4 +86,63 @@ try {
   }
 }
 ```
+### match模式匹配与隐式转换
+
+`scala`中的模式匹配与`java`或者`C`语言中的`case`语句很相似，都为根据变量值寻求匹配的`case`条件并执行相应语句，`case`分支需覆盖数值的所有条件。`scala`中的`case`语句可匹配数值、变量、类型、序列`seq`、元素及`case`类的匹配。
+
+```scala
+for {
+  x <- Seq(1, 2, 2.7, "one", "two", "four")
+} {
+  val value = x match {
+    case 1 => "int 1"
+    case i: Int => "other int: " + i
+    case d: Double => "a double: " + d
+    case "one" => "string one"
+    case s: String => "other string: " + s
+    case unexpected => "unexpected value: " + unexpected
+  }
+	println(value)
+}
+```
+
+简单的`case`语句会使用变量`x`与`case`条件分支进行比较，`case 1`、`case i:Int`、`case d: Double`、`case "one"`会将`x`变量的类型及数值进行比较，若匹配则执行子表达式`=>`之后的语句。	
+
+```scala
+// case类的匹配：可以在case语句中根据Person类成员字段属性值进行匹配
+val alice = Person("Alice", 25, Address("1 Scala Lane", "Chicago", "USA"))
+val bob = Person("Bob", 29, Address("2 Java Ave", "Miami", "USA"))
+val charlie = Person("Charlie", 32, Address("3 Python Ct", "Boston", "USA"))
+for (person <- Seq(alice, bob, charlie)) {
+  person match {
+    // p@...语法会将整个Person类的实例赋值给p, 当不需要从p的实例中取值只需写 p : Person => 就可以
+    case p @ Person("Alice", 25, Address(_, "Chicago", _)) => println("Hi Alice! $p")
+    case p @ Person("Bob", 29, a @ Address("2 Java Ave", "Miami", "USA")) =>
+    println(s"hi ${p.name}! age {${p.age}}, in ${a.city}")
+    case p @ Person(name, age, _) => println(s"Who are you, $age year-old person and $name? $p")
+  }
+}
+```
+
+`case`类的匹配与简单`case`语句匹配类似，在`match`表达式中其会对变量`person`进行匹配（类型和数值）。`Person("Alice", 25, Address(_, "Chicago", _))`中匹配`person`的`name`为`Alice`、`age`为`25	`	，并且居住地在`Chicago`的变量。可使用`case p @ Person `对`case`表达式中匹配的变量进行绑定，在匹配表达中通过`$p`访问变量信息。
+
+```scala
+case p @ Person("Alice", 25, Address(_, "Chicago", _)) => println("Hi Alice! $p")
+```
+
+`case`类有一个伴随对象，伴随对象有一个名为`apply`的工厂方法，用于构造对象。可以推断一定还存在另一个自动生成的`unapply`方法，用于提取和解构对象。`case`累匹配时会将`Address`变量中的属性`street`和`country`进行抽取。
+
+`scala`中隐式转换`implicit`的用法，使用隐式能够减少代码、能够向已有类型中注入新的方法（`implicit method`）。`calcTax`函数有两个参数列表`(amount: Float)`和隐式`(implicit rate: Float)`。使用`${calcTax(amount)}`调用`calcTax`函数，由于只传递了一个参数，`scala`则会从当前作用域中寻找类型匹配`implicit`变量`SimpleStateSalesTax.rate`作为参数。
+
+```scala
+def calcTax(amount: Float)(implicit rate: Float): Float = amount * rate
+object SimpleStateSalesTax {
+  implicit val rate: Float = 0.05F
+}
+{
+  import SimpleStateSalesTax.rate
+  val amount = 100F
+  println(s"Tax on $amount = ${calcTax(amount)}")
+}
+```
 
