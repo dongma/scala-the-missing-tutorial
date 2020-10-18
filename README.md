@@ -130,7 +130,7 @@ for (person <- Seq(alice, bob, charlie)) {
 case p @ Person("Alice", 25, Address(_, "Chicago", _)) => println("Hi Alice! $p")
 ```
 
-`case`类有一个伴随对象，伴随对象有一个名为`apply`的工厂方法，用于构造对象。可以推断一定还存在另一个自动生成的`unapply`方法，用于提取和解构对象。`case`累匹配时会将`Address`变量中的属性`street`和`country`进行抽取。
+`case`类有一个伴随对象，伴随对象有一个名为`apply`的工厂方法，用于构造对象。可以推断一定还存在另一个自动生成的`unapply`方法，用于提取和解构对象。`case`类匹配时会将`Address`变量中的属性`street`和`country`进行抽取。
 
 `scala`中隐式转换`implicit`的用法，使用隐式能够减少代码、能够向已有类型中注入新的方法（`implicit method`）。`calcTax`函数有两个参数列表`(amount: Float)`和隐式`(implicit rate: Float)`。使用`${calcTax(amount)}`调用`calcTax`函数，由于只传递了一个参数，`scala`则会从当前作用域中寻找类型匹配`implicit`变量`SimpleStateSalesTax.rate`作为参数。
 
@@ -145,4 +145,55 @@ object SimpleStateSalesTax {
   println(s"Tax on $amount = ${calcTax(amount)}")
 }
 ```
+### scala中的集合操作
+
+不同语言有不同的核心数据结构，但大致都包含同一个子集，子集中包含列表（`list`）、向量（`vector`）等序列型集合，数组（`array`）、映射（`map`）和集合（`set`）。每种都支持一批无副作用的高阶函数，称为组合器（`combinar`），如`map`、`filter`、`fold`等函数。
+
+在`scala`中使用`::`操作符向列表中追加元素，该元素会被追加到列表的头部，成为新列表的"头部"。除了头部，剩下的部分就是原列表中的元素，这些元素都没有被修改。`Nil`在`scala`中代表空队列，可以将`Nil`元素放到`Seq`的最后。`List`中还定义了`:+`和`+:`操作符，`:+`用于在尾部追加元素、`+:`方法用于在头部追加元素。
+
+```scala
+// scala中::向队列头部追加数据，从而创建新的列表. scala中以:结尾的方法向右结合，因此x::list调用其实是list.::(x),
+// list2的计算结果如下: list1.::("read").::("should").::("People")
+val list2 = "People" :: "should" :: "read" :: list1
+// - all elements in list2 use :: operator are: [List(People, should, read, programming, scala)]
+logger.info("all elements in list2 use :: operator are: [{}]", list2)
+
+// 使用++能将两个list拼接起来, 拼接顺序与list的顺序相同 (将两个list->flatmap->整合元素)
+val list4 = Seq("people", "should", "read") ++ list1
+```
+
+`scala`中对于`map`的操作，`key -> value`的形式语法形式实际上是用库中隐式转换实现的，实际上是调用了`Map.apply`方法。向`map`中添加元素可使用`+`操作符，移除元素使用`-`后跟`map`中`key`的列表（`stateCapitals2 - "Wyoming" - "Alabama"`）。
+
+```scala
+val stateCapitals = Map("Alabama" -> "Montgomery", "Alaska" -> "Juneau", "Wyoming" -> "Cheyenne")
+val lengths = stateCapitals map { entry => (entry._1, entry._2.length) }
+logger.info("static value length in stateCapitals map are: {}", lengths)
+// 在向Map中添加entry时 也可使用+操作符操作，新的entry元素会被添加到Map中
+val stateCapitals2 = stateCapitals + ("Virginia" -> "Richmond")
+logger.info("use + operator to add entry to Map, value: {}", stateCapitals2)
+// 使用-操作符从Map中根据key移除"Wyoming"、"Alabama"元素列表
+val elements = stateCapitals2 - "Wyoming" - "Alabama"
+logger.info("remove Wyoming、Alabama from stateCapitals2 value: {}", elements)
+```
+
+`scala`中的`Option`、`Some`和`None`操作符，其作用是对`java`中的`null`问题进行优化。注意：如果`Option`是一个`Some`，`Some.get`则会返回其中的值。然而，如果`Option`事实上是一个`None`值，`None.get`就会抛出一个`NoSuchElementException`的异常。一般使用时会用`get`的替代方案`getOrElse`获取数值。
+
+```scala
+// [main] INFO org.lang.scala.SeqOperate$ - Alabama: Some(Montgomery)
+logger.info("Alabama: " + stateCapitals.get("Alabama"))
+```
+
+`Option`还用于在`case`表达式中核验数据是否存在，在`spark`中有用`Some`提取数据的用法。当`Some`判断存在数据时，执行`replicatedVertexView.withActiveSet(activeSet)`，`case Some`和`case None`覆盖了取值的两种方式。
+
+```scala
+val view = activeSetOpt match {
+  case Some((activeSet, _)) =>
+  replicatedVertexView.withActiveSet(activeSet)
+  case None =>
+  replicatedVertexView
+}
+val activeDirectionOpt = activeSetOpt.map(_._2)
+```
+
+
 
