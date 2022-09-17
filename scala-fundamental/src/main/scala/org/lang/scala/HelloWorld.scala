@@ -7,7 +7,7 @@ import scala.annotation.tailrec
  * @date 2020/06/02
  * scala应用程序的主类，用于scala基础语法的学习
  */
-object HelloWorldScala {
+object HelloWorld {
 
   def main(args: Array[String]): Unit = {
     println("Hello, world, scala!")

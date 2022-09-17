@@ -5,7 +5,7 @@ package org.lang.scala
  * @date 2020/06/26
  * 深入学习scala中的for推导式 scala.io.Source读取文件并过滤掉空行
  */
-object RemoveBlank {
+object RemoveBlankApp {
 
   def main(args: Array[String]): Unit = for {
     filePath <- args

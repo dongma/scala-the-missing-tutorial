@@ -8,7 +8,7 @@ import java.util.Calendar
  * @date 2020/06/04
  * scala语法的核心要点，操作符重载、无参数方法、dsl等
  */
-object ScalaCoreSyntax {
+object ReadFile {
 
   def main(args: Array[String]): Unit = {
     // scala中的无参数方法：当定义无参数方法时省略了括号，那么在调用这些方法时必须省略括号，定于无副作用的无参方法

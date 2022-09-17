@@ -7,7 +7,7 @@ import org.slf4j.{Logger, LoggerFactory}
  * @date 2020/06/26
  * 深入理解scala中的for表达式，for表达式yield与map对应 表达式生成器提取元素
  */
-object ForInternals {
+object ForInExpr {
 
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
 

@@ -9,7 +9,7 @@ import scala.util.control.TailCalls._
  * @date 2020/06/13
  * scala中函数的内容，包括factorial尾部递归的定义以及collection创建etc
  */
-object ScalaFunction {
+object Function {
 
   def main(args: Array[String]): Unit = {
     // 对与从1～10的序列找出其中的偶数，然后对偶数值乘以2 最后将list中的item进行reduce生成最终结果
