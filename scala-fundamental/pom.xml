@@ -5,8 +5,34 @@
     <artifactId>scala-the-missing-tutorial</artifactId>
     <version>1.0.0</version>
   </parent>
-  <groupId>org.lang.scala</groupId>
   <artifactId>scala-fundamental</artifactId>
   <version>1.0.0</version>
+
+  <properties>
+    <akka.version>2.5.26</akka.version>
+    <akka.http.version>10.1.11</akka.http.version>
+    <scala.compact.version>2.12</scala.compact.version>
+  </properties>
+
+  <dependencies>
+    <!-- akka stream, akka-stream_2.11#2.6.11 -->
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-stream_${scala.compact.version}</artifactId>
+      <version>${akka.version}</version>
+    </dependency>
+    <!-- akka stream, akka-http_2.11#10.0.15 -->
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-http_${scala.compact.version}</artifactId>
+      <version>${akka.http.version}</version>
+    </dependency>
+    <!-- akka http-spray-json, akka-http-spray-json_2.11#10.1.11 -->
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-http-spray-json_${scala.compact.version}</artifactId>
+      <version>${akka.http.version}</version>
+    </dependency>
+  </dependencies>
 
 </project>
