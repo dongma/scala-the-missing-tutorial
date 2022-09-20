@@ -91,8 +91,6 @@ object ReadFile {
       println("Today isn't Firday the 13th. Lane.")
       Thread.sleep(86400000)
     }*/
-
-
   }
 
   /**
