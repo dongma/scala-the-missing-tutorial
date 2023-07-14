@@ -1,7 +1,7 @@
 Scala: The Missing Tutorial
 --------------
 
-Scala是基于java virtual  machine的一种语言，其广泛应用于诸多开源项目中，包括Apache Spark、Apache Kafka等。Martain Ordersky创造scala时，其运用了一些简洁的设计方法以及面向对象和函数式编程的一些看似简单却很强大的抽象，这使得Scala具备高聚合性。Scala是一门真正具备可扩展性的语言，我们既能使用它编写各种脚本语言，也能使用它实现大规模企业应用和中间件。
+> Scala是基于java virtual  machine的一种语言，其广泛应用于诸多开源项目中，包括Apache Spark、Apache Kafka等。Martain Ordersky创造scala时，其运用了一些简洁的设计方法以及面向对象和函数式编程的一些看似简单却很强大的抽象，这使得Scala具备高聚合性。Scala是一门真正具备可扩展性的语言，我们既能使用它编写各种脚本语言，也能使用它实现大规模企业应用和中间件。
 
 ## Contributing to the Scala: The Missing Tutorial
 
