@@ -7,6 +7,13 @@ Scala: The Missing Tutorial
 
 Please contribute if you see an error or something that could be better! Raise an [issue]() or send me a pull request to improve. Contributions of all kinds, including corrections, additions, improvements, and translations, are welcome!
 
+关于`scala`语言一些比较好的资源，包括《`scala`权威指南》、`RockTheJvm`的课程以及新近了解的`Cats`和`Cats-Effect`库：
+
+* `scala`权威指南：https://github.com/mbonaci/scala
+* `rockTheJvm`：https://www.youtube.com/@rockthejvm/playlists
+* `scala`最近很流行的`Cats`库：https://github.com/typelevel/cats
+* `Cats`中`I/O`以及多线程开发的库`Cats-Effects`：https://typelevel.org/cats-effect/docs/getting-started
+
 ### 变量声明和执行流程控制
 在scala中声明变量可使用`val`和`var`关键字，对于不可变的变量使用`val`进行声明（java中的`final`），对于可变引用使用`var`关键字，语句末尾不需使用`;`作为该语句结束的标志。
 ```scala
