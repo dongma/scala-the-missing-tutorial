@@ -7,7 +7,7 @@ import scala.util.control.TailCalls._
 /**
  * @author Sam Ma
  * @date 2020/06/13
- * scala中函数的内容，包括factorial尾部递归的定义以及collection创建etc
+ * scala中函数的内容，包括factorial尾部递归的定义以及collection创建
  */
 object Function {
 
