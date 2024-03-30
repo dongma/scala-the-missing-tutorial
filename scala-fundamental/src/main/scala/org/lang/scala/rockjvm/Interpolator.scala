@@ -6,7 +6,7 @@ package org.lang.scala.rockjvm
  * @author Sam Ma
  * @date 2022/09/23
  */
-object YourOwnInterpolator {
+object Interpolator {
 
   // s-interpolator
   val lifeOfPi = 3.14159

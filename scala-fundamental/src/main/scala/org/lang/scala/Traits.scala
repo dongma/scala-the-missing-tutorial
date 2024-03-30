@@ -5,7 +5,7 @@ package org.lang.scala
  * @date 2020/06/06
  * 在scala中定义抽象需用到trait关键字，可将其视为允许将声明方法实现的接口
  */
-object ScalaTrait {
+object Traits {
 
   def main(args: Array[String]): Unit = {
     val service1 = new ServiceImportante("uno")

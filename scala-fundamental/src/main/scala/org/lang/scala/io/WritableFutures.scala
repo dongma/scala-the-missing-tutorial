@@ -1,6 +1,5 @@
-package org.lang.scala.rockjvm
+package org.lang.scala.io
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future, Promise}
 
 /**
@@ -14,6 +13,7 @@ object WritableFutures {
   val aFuture = Future {
     42
   }
+
   // given - multithreaded
   object MyService {
     def produceAPreciousValue(theArg: Int): String = "The meaning of life is " + (theArg / 42)

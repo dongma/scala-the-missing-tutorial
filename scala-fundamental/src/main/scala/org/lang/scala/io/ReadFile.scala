@@ -1,4 +1,4 @@
-package org.lang.scala
+package org.lang.scala.io
 
 import java.io.File
 import java.util.Calendar
@@ -6,7 +6,7 @@ import java.util.Calendar
 /**
  * @author Sam Ma
  * @date 2020/06/04
- * scala语法的核心要点，操作符重载、无参数方法、dsl等
+ *       scala语法的核心要点，操作符重载、无参数方法、dsl等
  */
 object ReadFile {
 

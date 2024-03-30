@@ -6,7 +6,7 @@ package org.lang.scala.rockjvm
  * @author Sam Ma
  * @date 2022/09/17
  */
-object EightPMTricks {
+object PatternMatching {
 
   // 1- switch on steroids, 用case匹配，返回ordinal索引下标
   val aNumber = 44
@@ -20,9 +20,23 @@ object EightPMTricks {
   // 2- case class deconstruction
   case class Person(name: String, age: Int)
 
-  val bob = Person("Bob", 34)
+  val bob = Person("Bob", 34) // Person.apply("Bob", 34)
   val bobGreeting = bob match {
     case Person(name, age) => s"Hi, my name is $name and i am $age years old"
+    case _ => "Something else"
+  }
+
+  // deconstructing tuples，拆分tuple二维元组中的字段
+  val aTuple = ("Bob Jovi", "Rock")
+  val bandDescription = aTuple match {
+    case (band, genre) => s"$band belongs to the genre $genre"
+    case _ => "I don't know what you're talking about"
+  }
+
+  val aList = List(1, 2, 3) // decomposing lists
+  val listDescription = aList match {
+    case List(_, 2, _) => "List containing 2 on its second position"
+    case _ => "unknown list"
   }
 
   // trick #1, list extractors

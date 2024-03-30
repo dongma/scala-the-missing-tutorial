@@ -1,14 +1,12 @@
-package org.lang.scala.rockjvm
-
-import java.net.URLEncoder
+package org.lang.scala.akka
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.stream.ActorMaterializer
 
+import java.net.URLEncoder
 import scala.concurrent.Future
-import scala.concurrent.duration._
 
 /**
  * 使用Akka-http组件来发送http请求，用akka-http组件发请求
@@ -20,6 +18,7 @@ object AkkaHttp5mins {
 
   implicit val system = ActorSystem() // Akka actors
   implicit val materializer = ActorMaterializer() // Akka streams
+
   import system.dispatcher // "thread pool"
 
   val source =

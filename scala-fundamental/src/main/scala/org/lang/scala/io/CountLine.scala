@@ -1,4 +1,4 @@
-package org.lang.scala
+package org.lang.scala.io
 
 import scala.io.Source
 import scala.util.control.NonFatal
@@ -8,7 +8,7 @@ import scala.util.control.NonFatal
  * @date 2020/06/05
  * scala中的try..catch语法，从命令行中根据文件枯井统计文件行数
  */
-object TryCatch {
+object CountLine {
   /** usage: scala rounding.TryCatch filename1 filename2... */
   def main(args: Array[String]): Unit = {
     args foreach (arg => countLines(arg))
@@ -32,6 +32,6 @@ object TryCatch {
         s.close()
       }
     }
-   }
+  }
 
 }
